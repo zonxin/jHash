@@ -152,7 +152,25 @@
         real = "80d2381ab04176f1768e0706b8d023e4";
         hash = obj.getHexDigest();
         document.write(tpl_hmac_md5.render({str:str,color:real == hash ? "green" : "red",hash})); 
-
+        
+        var pbtest = [ 
+            {P:"password",    S:"salt",    c:        1,dklen:20,DK:"0c60c80f961f0e71f3a9b524af6012062fe037a6"},
+            {P:"password",    S:"salt",    c:        2,dklen:20,DK:"ea6c014dc72d6f8ccd1ed92ace1d41f0d8de8957"},
+            {P:"password",    S:"salt",    c:     4096,dklen:20,DK:"4b007901b765489abead49d926f721d065a429c1"},
+            //{P:"password",    S:"salt",    c: 16777216,dklen:20,DK:"eefe3d61cd4da4e4e9945b3d6ba2158c2634e984"},
+            {P:"pass\x00word",S:"sa\x00lt",c:     4096,dklen:16,DK:"56fa6aa75548099dcc37d7f03425e0c3"},
+            {P:"passwordPASSWORDpassword",S:"saltSALTsaltSALTsaltSALTsaltSALTsalt",
+                c: 4096,dklen:25,DK:"3d2eec4fe41c849b80c8d83662c0e44a8b291a964cf2f07038"},
+        ]
+        var tpl_pbkdf2_hmac_sha1 = '<p>PBKDF2-HMAC-SHA1("{ P }","{ S }",{ c },{ dklen }):<br /><span style="color:{ color }">{ hash }</span></p>';
+        tpl_pbkdf2_hmac_sha1  = new Template(tpl_pbkdf2_hmac_sha1);
+        var hmac_sha1 = jHash.hmac(jHash.sha1);
+        for(key in pbtest){
+            hash = jHash.pbkdf2(hmac_sha1,pbtest[key].c,pbtest[key].dklen)(pbtest[key].P,pbtest[key].S);
+            pbtest[key].hash = hash;
+            pbtest[key].color = pbtest[key].DK === hash ? 'green' : 'red';
+            document.write(tpl_pbkdf2_hmac_sha1.render(pbtest[key])); 
+        }
         </script>
     </body>
     

@@ -12,6 +12,8 @@
             document.body.innerHTML += jHash.sha256("abc") + "<br />";
             document.body.innerHTML += jHash.sha224("abc") + "<br />";
             document.body.innerHTML += jHash.hmac(jHash.md5)("key","abc") + "<br />";
+            var hmac_sha1 = jHash.hmac(jHash.sha1);
+            document.body.innerHTML += jHash.pbkdf2(hmac_sha1,1,20)("password","salt") + "<br />";
         });
         </script>
     </head>

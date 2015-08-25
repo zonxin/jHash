@@ -1,6 +1,6 @@
 /*
 * Zong Shouxin's hash/encryption algroithm
-* support MD5, SHA-1, SHA-256, SHA-224, HMAC
+* support MD5, SHA-1, SHA-256, SHA-224, HMAC, PBKDF2
 * support nodejs, require.js and sea.js
 * support utf-8, utf-16, usc-2 little endian and usc-2 big endian
 *
