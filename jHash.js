@@ -1,6 +1,6 @@
 /*
 * Zong Shouxin's hash/encryption algroithm
-* support MD5, SHA-1, SHA-256, SHA-224, HMAC
+* support MD5, SHA-1, SHA-256, SHA-224, HMAC, PBKDF2
 * support nodejs, require.js and sea.js
 * support utf-8, utf-16, usc-2 little endian and usc-2 big endian
 *
@@ -17,24 +17,23 @@
 
     var jHash = {};
 
-    var InnerHash = (function() {
-        function init()      { throw "InnerHash.init should be reload";      }
-        function addPart()   { throw "InnerHash.addPart should be reload";   }
-        function transform() { throw "InnerHash.transform should be reload"; }
-        function getDigest() { throw "InnerHash.getDigest should be reload"; }
-        function getHexDigest(){
-            var HEXSYM="0123456789abcdef";
-            // toHEXString(result)
-            var result = this.getDigest();
-            var sresult = "";
-            var i=0;
-            var len = result.length;
-            for(i=0;i < len;i++){
-                sresult += HEXSYM.charAt((result.charCodeAt(i) >> 4) & 0xF);
-                sresult += HEXSYM.charAt((result.charCodeAt(i)     ) & 0xF);
-            }          
-            return sresult;
+    var bufferToHexString = function(buffer){
+        var HEXSYM = "0123456789abcdef";
+        var i,sresult = "";
+        for(i=0; i<buffer.length; i++){
+            sresult += HEXSYM.charAt( (buffer.charCodeAt(i) >> 4) & 0xF );
+            sresult += HEXSYM.charAt( (buffer.charCodeAt(i)     ) & 0xF );
         }
+        return sresult;
+    };
+
+
+    var InnerHash = (function() {
+        function init()        { throw "InnerHash.init should be overriden";      }
+        function addPart()     { throw "InnerHash.addPart should be  verriden";   }
+        function transform()   { throw "InnerHash.transform should be overriden"; }
+        function getDigest()   { throw "InnerHash.getDigest should be overriden"; }
+        function getHexDigest(){ return bufferToHexString(this.getDigest()); }
         function InnerHash(){}
         InnerHash.prototype.reInit         = init;
         InnerHash.prototype.addPart      = addPart;
@@ -428,6 +427,55 @@
     };
     jHash.hmac = hmac;
 
+
+    //  Uint32ArrayToBuffer: (Uint32[],boolean) -> buffer
+    var bufferXor = function (buf1,buf2){  
+        // min length
+        var length = buf1.length > buf2.length ? buf2.length: buf1.length; 
+        var i,result='';
+        for(i=0; i < length; i++){
+            result += String.fromCharCode( (buf1.charCodeAt(i) ^ buf2.charCodeAt(i) ) & 0xFF);
+        }
+        return result;
+    };
+
+
+    // pbkdf2:: (hmacFunction,count,dlen) -> (buffer,buffer,boolean) -> string/buffer
+    function pbkdf2(hmac,count,dlen)
+    { 
+        function F(password,salt,count,num){
+            var prf = new hmac(password);
+            prf.addPart(salt);
+            prf.addPart(Uint32ArrayToBuffer([num],true));
+            var u1 = prf.getDigest();
+            var result = u1;
+            var i;
+            for(i=1; i< count; i++){
+                prf.reInit(password);
+                prf.addPart(u1);
+                var u2 = prf.getDigest();
+                result = bufferXor(result,u2);
+                u1 = u2;
+            }
+            return result;
+        }
+        
+        return function(password,salt,isBuffer){
+            var t1 = F(password,salt,count,1);
+            var l = Math.ceil(dlen/t1.length);
+            var i;
+            for(i=2; i<=l; i++){
+                var t2 = F(password,salt,count,i);
+                t1 += t2;
+            }
+            t1 = t1.substr(0,dlen);
+            if(isBuffer){
+                return t1;
+            }
+            return bufferToHexString(t1); 
+        };
+    }
+    jHash.pbkdf2 = pbkdf2;
 
 
     /*************toolkits******************************/

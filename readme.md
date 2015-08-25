@@ -1,6 +1,6 @@
 # javascript 哈希算法
 
-支持 md5 sha1 sha256 sha244 HMAC
+支持 md5 sha1 sha256 sha244 HMAC PBKDF2
 支持 nodejs require.js sea.js模块
 支持 中文编码/unicode编码( UTF-8,UTF-16, UCS-2 little/big-endian)
 
@@ -53,7 +53,7 @@
             var hash5 = jHash.sha1(jHash.toolkits.UCS2toLittleEndian("中文"));
             //hash5 === "a09ea1fd5d2f2e552370159ff451f054d7574c47";
 
-            // ================ HMAC ================
+            // ================ HMAC MD5/SHA1/SHA244/SHA256 ================
             var hmac_md5 = jHash.hmac(jHash.md5);
             hash5 = hmac_md5("key","abc");
             // :: OR ::
@@ -64,6 +64,14 @@
 
             // =================== SHA256  SHA244============================
             // same as md5 and sha1 except function name is sha256 and sha244
+
+            // ================== PBKDF2 ===================================
+            var hmac_sha1 = jHash.hmac(jHash.sha1);
+            var hash6 = jHash.pbkdf2(hmac_sha1,1,20)("password","salt")
+            // hash6 === "0c60c80f961f0e71f3a9b524af6012062fe037a6";
+            //对于 WPA2 加密
+            var WPA2 = jHash.pbkdf2(hmac_sha1,4096,256);
+            var WPA2_hash = WPA2("PASSWORD","SSID");
             </script>
         </body>
     </html>
