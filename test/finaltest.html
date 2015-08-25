@@ -153,9 +153,6 @@
         hash = obj.getHexDigest();
         document.write(tpl_hmac_md5.render({str:str,color:real == hash ? "green" : "red",hash})); 
 
-        var k =jHash.hmac(jHash.sha244);
-        hash = k("key","abc");
-        console.log(hash);
         </script>
     </body>
     

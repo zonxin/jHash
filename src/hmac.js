@@ -8,7 +8,6 @@ define([
         var block_size = (new hash()).block_size;
         function getDigest(){
             var digest = this.innerHash.getDigest();
-            console.log(digest.length);
             this.outHash.addPart(digest);
             return this.outHash.getDigest();
         }
