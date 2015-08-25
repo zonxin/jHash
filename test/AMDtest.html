@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="http://cdn.bootcss.com/require.js/2.1.20/require.js"></script>
+        <title> require test</title>
+        <script>
+        //
+        requirejs(["../src/jHash"],function(jHash){
+            document.body.innerHTML += jHash.md5("abc")    + "<br />";
+            document.body.innerHTML += jHash.sha1("abc")   + "<br />";
+            document.body.innerHTML += jHash.sha256("abc") + "<br />";
+            document.body.innerHTML += jHash.sha224("abc") + "<br />";
+            document.body.innerHTML += jHash.hmac(jHash.md5)("key","abc") + "<br />";
+        });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

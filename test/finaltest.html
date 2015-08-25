@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <!-- script src="http://cdn.bootcss.com/seajs/3.0.1/sea.js"></script> -->
+        <script src="../dest/jHash.js"></script>
+        <script>
+            function Template(tpl) {
+                var fn, match, code = ['var r=[];\nvar _html = function (str) { return str.replace(/&/g, \'&amp;\').replace(/"/g, \'&quot;\').replace(/\'/g, \'&#39;\').replace(/</g, \'&lt;\').replace(/>/g, \'&gt;\'); };'],
+                re = /\{\s*([a-zA-Z\.\_0-9()]+)(\s*\|\s*safe)?\s*\}/m,
+                addLine = function (text) {
+                    code.push('r.push(\'' + text.replace(/\'/g, '\\\'').replace(/\n/g, '\\n').replace(/\r/g, '\\r') + '\');');
+                };
+                while (match = re.exec(tpl)) {
+                    if (match.index > 0) {
+                        addLine(tpl.slice(0, match.index));
+                    }
+                    if (match[2]) {
+                        code.push('r.push(String(this.' + match[1] + '));');
+                    }
+                    else {
+                        code.push('r.push(_html(String(this.' + match[1] + ')));');
+                    }
+                    tpl = tpl.substring(match.index + match[0].length);
+                }
+                addLine(tpl);
+                code.push('return r.join(\'\');');
+                fn = new Function(code.join('\n'));
+                this.render = function (model) {
+                    return fn.apply(model);
+                };
+            }
+        </script>
+    </head>
+    <body>
+        <script>
+            var input = [
+                "a",
+                "abc",
+                "oUhD36jEjXbzK2MfEP3hOHpDqQQDoFRrxnvqgCa91DWZeEfKusZ66ljz",
+                "icgr8uL46XEuDa5SFva3YnLgmV7dWrbbxASkI12hD1W6opVn4WCa8jUMSn2Geqd6",
+                "EE1FIszmLFTeozDTdTCTc3H45GFFsSnQgfpAmEcOU14MPQjbSqwwpjpQ2mnr0zXsiHbaCvcdoNS7dctKvKrPA5JksNDpRRAitjmYGE1mM9JQCfChkd7gaS7X",
+                "BFHDiim398jEymeCoKvQ8E3lNOgeuimqzIHp7ph7g0D10KRx957yBpVi9MUHiMxTEAO9XUY7BJfcK8MLG4rszKwslqb4BJ3u48TFQZxHhHH4OLw5yPsWw0PA7mbdBI23",
+                "VOao5WMDyzK6cIdVUNFgnSkxsNjR74Walohcn2D6KkdbP1ROf5GObX3c9iB8YGqmZSAb6ANeBv5UIaNpwWcI5nSGIxvsU0qDGNCV0kJZHKN2jHrusH3yAT6KuySBxqBboxVKY2K8fxPccair2NJoZ1dw4024FITsp90w8nwz6dzR2gbMt5S58zYmRYrAORlhNcFviXIXYemyGkI46qiMnlE73Ic52ajv32wroNVr0HRkCU35Qx3KLaIxDQ7GTqLC6gG3uPPKt6CsAJT6F2UjC5sUTKW4OBWRumTEMPFwLnSsxTHyuKSe6Qb5XbI5yw9mJEK3ZqSPI5JcMdcWcmeamCsyJbBz4XXI7AbIUB1Z40lvn06TW9ytC0E0XbLrsUvIC6k9kaYEdREKPS7zL7deGiLTGsy4ka8i2kqA3Gn6ek7UXXdinjXyKPsrOF5Ph6fSvBaRkygO6jRJ5n2pfmO1fUmO4ONVHGsK8Beyom0egrVcsNGoSoeA9AFx1owzQPSV0PYsiwuTjTYgSrKerXwwq4PczHEd4QO3jjw866AE4iZODfs6xwsIK4KltyzdnlzIOx1V7VKlK5rTFed7hVaauDWLj8pFddDVzFaZzYYuz0C7WdozDekRW2dNC80rwWWQPXUPqV2sqNavaIdgVPuGN5l49a3AZ7ALgwzQu2OFUiYhF825LMMMNzguElBTChBqlc5hMj1eAFcex8UXYiM3QYfkFfMKtVat8Qsm5K9JwVD67nbV2FFU7uuJF0IaMORaaGDJP1ChYEkkynCvzhCmzfYmrGMg8wosB5p4clbPp4k1NHyldXqfEMslLW0G6dm8MuPZqvGKPgP9Inp3CzqMlLMudWPzXItrOBzftiQAcJu0vzspQMFih0qDir2zLLMJyRQ5O5Cdd52WpwLARaemhEmrVcXgDBquO5jTyGt1l82mxFsXqAWY5GZeWCYDfKqAOvp8Nr7z163S76dM6Ge5iEzg1C81H2NMMTSwbBtp"
+            ];
+            var  md5=[
+                "0cc175b9c0f1b6a831c399e269772661",
+                "900150983cd24fb0d6963f7d28e17f72",
+                "324b612c047397ee31ceadab4834fdd5",
+                "41412aa867ba06e1c085304fc8bda9ec",
+                "9ad63a67c98e93a1ef166d000678d747",
+                "c9581559c8325cb14ee15eca931eb80d",
+                "6ca28a319f8ac5f9492de0a2f7c3fb81"
+            ];
+            var sha1 = [
+                "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8",
+                "a9993e364706816aba3e25717850c26c9cd0d89d",
+                "cb98ac08e659de85871b407e4b140fe91a39bba0",
+                "1fa92a50c0a9d11dea2c019c415a53a72a950151",
+                "346bb19b7ea592fa4db0b10b5315b41ec25e2362",
+                "0f5f7cafe945084c1e7664067b88adbe56b963b5",
+                "2fa4087fec03c47f9e524ed6d39ab052d4d1d861"
+            ];
+            var sha256 = [
+                "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+                "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+                "8c0381957410e105d97adb4a6a5e7993aa6641e4bd9cf48e7a889a3cca80799b",
+                "957a58e0a22b6dc37565a9e2041117f3c9b7e8226e216501eafcb5b0813c84d5",
+                "adbc73c8b1b7697d3717a8edc0076d0fc046c042180e0e0fc3e66e75255f4ccc",
+                "55b81984d8de9688efde70d86cbe3acdefcc96966bbf7474bbea08a1cf5bbc85",
+                "ea61adda16b7351ca9bd202deb05c0383d06f104a0c157b0434e15a8470736a8"
+            ];
+            var sha224 = [
+                "abd37534c7d9a2efb9465de931cd7055ffdb8879563ae98078d6d6d5",
+                "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7",
+                "7fb2d429670e2e3c0004846c408df552b44e2cfe8bc0fcfe13138b24",
+                "8a684615cadfc7c6d5918d78a83cb6547bc3f6dbd6cf7ec8796cd903",
+                "5d7ef80526d09860832cb960a5bbc4474c9c6c6b9971b93c8f8345f1",
+                "cd69d756b8a9dda921f5a7731108f33659fc5c293717a804f73d39f6",
+                "245a29f0ad1c448138f0c0d00251dd59cf0d38768be76d404a744457"
+            ];
+            
+            var tpl_md5 = '<p>md5("{ str }"):<br /><span style="color:{ color }">{ hash }</span></p>';
+            tpl_md5= new Template(tpl_md5);
+            var tpl_sha1 = '<p>sha1("{ str }"):<br /><span style="color:{ color }">{ hash }</span></p>';
+            tpl_sha1 = new Template(tpl_sha1);
+            var tpl_sha256 = '<p>sha256("{ str }"):<br /><span style="color:{ color }">{ hash }</span></p>';
+            tpl_sha256 = new Template(tpl_sha256);
+            var tpl_sha224 = '<p>sha224("{ str }"):<br /><span style="color:{ color }">{ hash }</span></p>';
+            tpl_sha224 = new Template(tpl_sha224);
+            var tpl_hmac_md5 = '<p>hmac_md5("key","{ str }"):<br /><span style="color:{ color }">{ hash }</span></p>';
+            tpl_hmac_md5 = new Template(tpl_hmac_md5);
+
+            var str,hash;
+            for(var i =0; i < input.length; i++){
+                hash = jHash.md5(input[i]);
+                document.write(tpl_md5.render({str:input[i],color:md5[i] == hash ? "green" : "red",hash}));
+                hash = jHash.sha1(input[i]);
+                document.write(tpl_sha1.render({str:input[i],color:sha1[i] == hash ? "green" : "red",hash}));
+                hash = jHash.sha256(input[i]);
+                document.write(tpl_sha256.render({str:input[i],color:sha256[i] == hash ? "green" : "red",hash}));
+                hash = jHash.sha224(input[i]);
+                document.write(tpl_sha224.render({str:input[i],color:sha224[i] == hash ? "green" : "red",hash}));
+            }
+        str = "中文";
+        hash = jHash.sha1(jHash.toolkits.UCS2toUTF8(str));
+        real = "7be2d2d20c106eee0836c9bc2b939890a78e8fb3";
+        document.write(tpl_sha1.render({str:str,color:real == hash ? "green" : "red",hash}));
+
+        
+        str = "abc";
+        var obj = new jHash.sha1();
+        obj.addPart("abc");
+        hash=obj.getHexDigest();
+        real = "a9993e364706816aba3e25717850c26c9cd0d89d";
+        document.write(tpl_sha1.render({str:str,color:real == hash ? "green" : "red",hash}));
+        
+        // length=1000
+        str = input[i-1];
+        obj.reInit();
+        obj.addPart(str.substring(0,100));
+        obj.addPart(str.substring(100,200));
+        obj.addPart(str.substring(200,300));
+        obj.addPart(str.substring(300,400));
+        obj.addPart(str.substring(400,500));
+        obj.addPart(str.substring(500,600));
+        obj.addPart(str.substring(600,700));
+        obj.addPart(str.substring(700,800));
+        obj.addPart(str.substring(800,900));     
+        obj.addPart(str.substring(900));
+        hash = obj.getHexDigest();
+        real = sha1[i-1];
+        document.write(tpl_sha1.render({str:str,color:real == hash ? "green" : "red",hash})); 
+
+
+        str = "abc";
+        var hmac_md5 = jHash.hmac(jHash.md5);
+        hash = hmac_md5("key","abc");
+        real = "d2fe98063f876b03193afb49b4979591";
+        document.write(tpl_hmac_md5.render({str:str,color:real == hash ? "green" : "red",hash})); 
+
+        obj = new hmac_md5("key");
+        obj.addPart("ab");
+        obj.addPart("c");
+        hash = obj.getHexDigest();
+        real = "d2fe98063f876b03193afb49b4979591";
+        document.write(tpl_hmac_md5.render({str:str,color:real == hash ? "green" : "red",hash})); 
+
+        obj.reInit("keykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykey"); // string.length = 75
+        obj.addPart("ab");
+        obj.addPart("c");
+        real = "80d2381ab04176f1768e0706b8d023e4";
+        hash = obj.getHexDigest();
+        document.write(tpl_hmac_md5.render({str:str,color:real == hash ? "green" : "red",hash})); 
+
+        var k =jHash.hmac(jHash.sha244);
+        hash = k("key","abc");
+        console.log(hash);
+        </script>
+    </body>
+    
+</html>
