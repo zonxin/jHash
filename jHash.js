@@ -47,21 +47,18 @@
     var hasOwnProperty = {}.hasOwnProperty;
 
 
-    var classExtends = (function() {
-        function classExtends(child,parent) {
-            var key;
-            for( key in parent){
-                if(hasOwnProperty.call(parent,key)){
-                    child[key] = parent[key];
-                }
+    function classExtends(child,parent) {
+        var key;
+        for( key in parent){
+            if(hasOwnProperty.call(parent,key)){
+                child[key] = parent[key];
             }
-            function ctor(){this.constructor = child;}
-            ctor.prototype = parent.prototype;
-            child.prototype = new ctor();
-            child.SUPER = parent.prototype;
         }
-        return classExtends;
-    })();
+        function ctor(){this.constructor = child;}
+        ctor.prototype = parent.prototype;
+        child.prototype = new ctor();
+        child.SUPER = parent.prototype;
+    }
 
     var toUint32 = function(x) { return x>>>0; };
 
@@ -388,7 +385,6 @@
         var block_size = (new hash()).block_size;
         function getDigest(){
             var digest = this.innerHash.getDigest();
-            console.log(digest.length);
             this.outHash.addPart(digest);
             return this.outHash.getDigest();
         }
