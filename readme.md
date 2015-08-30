@@ -1,7 +1,9 @@
 # javascript 哈希算法
 
 支持 md5 sha1 sha256 sha244 HMAC PBKDF2
+
 支持 nodejs require.js sea.js模块
+
 支持 中文编码/unicode编码( UTF-8,UTF-16, UCS-2 little/big-endian)
 
 ### 示例
