@@ -44,6 +44,7 @@ function convert( name, path, contents ) {
 }
 
 var requirejs = require("requirejs");
+var path = require("path");
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
@@ -72,6 +73,9 @@ module.exports = function(grunt) {
         onBuildWrite: convert
     });
 
+        var baseUrl = path.resolve(options.baseUrl);
+        var src = path.resolve(this.files[0].src[0]);
+        options.name = path.relative(baseUrl,src).replace(/\.js$/,"");
         options.out = this.files[0].dest;
         requirejs.optimize( options, function( response ) {
             grunt.verbose.writeln( response );

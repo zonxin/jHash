@@ -3,8 +3,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         build:{
-            options:{ name:'jHash' },
-            compile:{ files:[{dest:"dest/jHash.js"}] }
+            compile:{ src:["src/jHash.js"],dest:"dest/jHash.js"}
         },
         jshint:{
             beforecompile:["src/**/*.js","!src/intro.js","!src/outro.js"],
