@@ -8,6 +8,8 @@
 
 使用方法及编译好的代码，参见<https://github.com/zonxin/jHash/tree/gh-pages>
 
+### 仅供学习 javascript 和 hash 算法
+
 ### 编译 jHash
 
     # 安装 npm git（ 过程略）
