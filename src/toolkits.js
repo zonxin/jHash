@@ -27,6 +27,7 @@ define([
                 R += c;
                 k++;
             }
+            return R;
         };
         //UCS-2 to UTF-8 : string -> buffer
         function UCS2toUTF8(str){
